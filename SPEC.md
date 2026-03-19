@@ -577,6 +577,8 @@ NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 - ✅ **Leads Management** - Real-time data from Supabase
 - ✅ Status updates with toast feedback
 - ✅ Filter by status
+- ✅ **User Management** - จัดการ role ผู้ใช้งาน (admin/agent/customer)
+- ✅ **First User = Admin** - User คนแรกเป็น Admin อัตโนมัติ
 
 ### Admin Analytics Dashboard
 - ✅ Real-time statistics
@@ -600,3 +602,4 @@ NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 | 1.0.0 | 2026-03-19 | Initial MVP specification |
 | 1.1.0 | 2026-03-19 | Added: Toast notifications, Save plans, Share links, PWA, Analytics, SEO |
 | 1.2.0 | 2026-03-19 | Added: PWA Icons, Forgot/Reset Password, Dashboard History, Leads Supabase integration |
+| 1.3.0 | 2026-03-19 | Added: User Management, First User = Admin, Role-based access control |

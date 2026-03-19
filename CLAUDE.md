@@ -379,6 +379,20 @@ export const metadata: Metadata = {
 | Plans | /admin/plans | CRUD insurance plans |
 | Leads | /admin/leads | Manage customer leads (Supabase connected) |
 | Analytics | /admin/analytics | Charts and metrics |
+| Users | /admin/users | Manage user roles (admin/agent/customer) |
+
+## User Roles
+
+| Role | Description | Access |
+|------|-------------|--------|
+| admin | ผู้ดูแลระบบ | เข้าถึงได้ทุกหน้า รวมถึง /admin/* |
+| agent | ตัวแทนขาย | ดู leads และ analytics ได้ |
+| customer | ลูกค้าทั่วไป | ใช้งานหน้าเปรียบเทียบและ dashboard |
+
+### First User = Admin
+- User คนแรกที่สมัครจะได้ role = admin อัตโนมัติ
+- User คนต่อๆ ไปจะเป็น customer
+- Admin สามารถเปลี่ยน role ของ user อื่นได้ผ่านหน้า /admin/users
 
 ## User Pages
 

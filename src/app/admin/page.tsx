@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { Card } from '@/components/ui';
-import { FileText, Users, BarChart3, Settings } from 'lucide-react';
+import { FileText, Users, BarChart3, Settings, UserCog } from 'lucide-react';
 import { formatDistanceToNow } from '@/lib/utils';
 
 export const metadata = {
@@ -17,19 +17,25 @@ export default async function AdminDashboardPage() {
     redirect('/login?redirect=/admin');
   }
 
-  // For MVP, we'll check role from user metadata
-  // In production, fetch from profiles table
-  const isAdmin = user.user_metadata?.role === 'admin' || user.email?.includes('admin');
+  // Check role from profiles table
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  const isAdmin = profile?.role === 'admin';
 
   if (!isAdmin) {
     redirect('/dashboard');
   }
 
   // Fetch real statistics
-  const [plansCount, leadsCount, comparisonsCount, recentLeads] = await Promise.all([
+  const [plansCount, leadsCount, comparisonsCount, usersCount, recentLeads] = await Promise.all([
     supabase.from('insurance_plans').select('*', { count: 'exact', head: true }),
     supabase.from('leads').select('*', { count: 'exact', head: true }),
     supabase.from('comparison_history').select('*', { count: 'exact', head: true }),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase
       .from('leads')
       .select('*, plan:insurance_plans(name)')
@@ -70,6 +76,14 @@ export default async function AdminDashboardPage() {
       href: '/admin/analytics',
       color: 'bg-purple-100 text-purple-600',
     },
+    {
+      icon: UserCog,
+      label: 'ผู้ใช้งาน',
+      value: String(usersCount.count || 0),
+      change: 'คน',
+      href: '/admin/users',
+      color: 'bg-orange-100 text-orange-600',
+    },
   ];
 
   return (
@@ -82,7 +96,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
           {stats.map((stat) => (
             <Link key={stat.label} href={stat.href}>
               <Card variant="bordered" className="hover:shadow-md transition-shadow">
@@ -164,6 +178,16 @@ export default async function AdminDashboardPage() {
                 <div>
                   <p className="font-medium text-gray-900">จัดการ Leads</p>
                   <p className="text-sm text-gray-500">ดูรายชื่อลูกค้าที่สนใจ</p>
+                </div>
+              </Link>
+              <Link
+                href="/admin/users"
+                className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <UserCog size={20} className="text-gray-400 mr-3" />
+                <div>
+                  <p className="font-medium text-gray-900">จัดการผู้ใช้งาน</p>
+                  <p className="text-sm text-gray-500">กำหนดสิทธิ์ Admin, Agent, Customer</p>
                 </div>
               </Link>
               <Link

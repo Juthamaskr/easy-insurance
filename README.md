@@ -25,6 +25,11 @@
 - 👥 **Leads Management** - เชื่อมต่อ Supabase + อัพเดทสถานะ real-time
 - 🎨 **PWA Icons** - ไอคอนครบทุกขนาด + OG Image
 
+### New in v1.3
+- 👑 **User Management** - จัดการ role ผู้ใช้งาน (Admin/Agent/Customer)
+- 🚀 **First User = Admin** - User คนแรกเป็น Admin อัตโนมัติ ไม่ต้องรัน SQL
+- 🔐 **Role-based Access** - แยกสิทธิ์การเข้าถึงตาม role
+
 ## 🚀 Getting Started
 
 ### Prerequisites

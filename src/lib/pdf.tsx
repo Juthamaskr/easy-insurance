@@ -10,16 +10,16 @@ import {
 } from '@react-pdf/renderer';
 import type { InsurancePlan } from '@/types';
 
-// Register Thai font (using Sarabun from Google Fonts CDN)
+// Register Thai font (using Noto Sans Thai from cdnjs)
 Font.register({
-  family: 'Sarabun',
+  family: 'NotoSansThai',
   fonts: [
     {
-      src: 'https://fonts.gstatic.com/s/sarabun/v13/DtVjJx26TKEr37c9YL5rik8s6w.ttf',
+      src: 'https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-thai@5.0.3/files/noto-sans-thai-thai-400-normal.woff',
       fontWeight: 400,
     },
     {
-      src: 'https://fonts.gstatic.com/s/sarabun/v13/DtVjJx26TKEr37c9YOZqik8s6w.ttf',
+      src: 'https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-thai@5.0.3/files/noto-sans-thai-thai-700-normal.woff',
       fontWeight: 700,
     },
   ],
@@ -27,7 +27,7 @@ Font.register({
 
 const styles = StyleSheet.create({
   page: {
-    fontFamily: 'Sarabun',
+    fontFamily: 'NotoSansThai',
     padding: 40,
     fontSize: 10,
   },

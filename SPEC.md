@@ -593,6 +593,13 @@ NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 - ✅ Robots.txt configured
 - ✅ Structured data ready
 
+### New in v1.4 - Agent Tools
+- ✅ **Commission Tracker** - คำนวณและติดตามค่าคอมมิชชั่นอัตโนมัติ
+- ✅ **Quote Calculator** - คำนวณเบี้ยประกันตามอายุ/เพศ
+- ✅ **Customer Notes** - จดบันทึกลูกค้าแต่ละคน พร้อมประวัติการติดต่อ
+- ✅ **Follow-up Reminder** - ระบบแจ้งเตือนติดตามลูกค้า
+- ✅ **AI Recommendation** - แนะนำแผนประกันที่เหมาะสมกับลูกค้าโดยใช้ scoring algorithm
+
 ---
 
 ## 📝 Revision History
@@ -603,3 +610,4 @@ NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 | 1.1.0 | 2026-03-19 | Added: Toast notifications, Save plans, Share links, PWA, Analytics, SEO |
 | 1.2.0 | 2026-03-19 | Added: PWA Icons, Forgot/Reset Password, Dashboard History, Leads Supabase integration |
 | 1.3.0 | 2026-03-19 | Added: User Management, First User = Admin, Role-based access control |
+| 1.4.0 | 2026-03-19 | Added: Commission Tracker, Quote Calculator, Customer Notes, Follow-up Reminder, AI Recommendation |

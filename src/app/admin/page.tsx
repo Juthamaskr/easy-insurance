@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { Card } from '@/components/ui';
-import { FileText, Users, BarChart3, Settings, UserCog } from 'lucide-react';
+import { FileText, Users, BarChart3, Settings, UserCog, DollarSign, Bell } from 'lucide-react';
 import { formatDistanceToNow } from '@/lib/utils';
 
 export const metadata = {
@@ -188,6 +188,26 @@ export default async function AdminDashboardPage() {
                 <div>
                   <p className="font-medium text-gray-900">จัดการผู้ใช้งาน</p>
                   <p className="text-sm text-gray-500">กำหนดสิทธิ์ Admin, Agent, Customer</p>
+                </div>
+              </Link>
+              <Link
+                href="/admin/commission"
+                className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <DollarSign size={20} className="text-gray-400 mr-3" />
+                <div>
+                  <p className="font-medium text-gray-900">ค่าคอมมิชชั่น</p>
+                  <p className="text-sm text-gray-500">ติดตามค่าคอมและรายได้</p>
+                </div>
+              </Link>
+              <Link
+                href="/admin/reminders"
+                className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <Bell size={20} className="text-gray-400 mr-3" />
+                <div>
+                  <p className="font-medium text-gray-900">แจ้งเตือนติดตาม</p>
+                  <p className="text-sm text-gray-500">รายการลูกค้าที่ต้องติดตาม</p>
                 </div>
               </Link>
               <Link

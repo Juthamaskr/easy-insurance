@@ -30,6 +30,13 @@
 - 🚀 **First User = Admin** - User คนแรกเป็น Admin อัตโนมัติ ไม่ต้องรัน SQL
 - 🔐 **Role-based Access** - แยกสิทธิ์การเข้าถึงตาม role
 
+### New in v1.4 - Agent Tools
+- 💰 **Commission Tracker** - ติดตามค่าคอมมิชชั่นและรายได้
+- 🧮 **Quote Calculator** - คำนวณเบี้ยประกันตามอายุ/เพศ
+- 📝 **Customer Notes** - จดบันทึกลูกค้า + ประวัติการติดต่อ
+- ⏰ **Follow-up Reminder** - แจ้งเตือนติดตามลูกค้า
+- 🤖 **AI Recommendation** - แนะนำแผนประกันที่เหมาะสม
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -143,6 +150,7 @@ NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 
 ## 📖 Documentation
 
+- [USER_MANUAL.md](./USER_MANUAL.md) - **คู่มือการใช้งาน (ภาษาไทย)**
 - [SPEC.md](./SPEC.md) - Full specification
 - [CLAUDE.md](./CLAUDE.md) - Developer context
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, Button, Select, Modal, Skeleton, useToast } from '@/components/ui';
-import { ArrowLeft, Phone, Mail, MessageSquare, Check, X, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Phone, Mail, MessageSquare, Check, X, RefreshCw, StickyNote, Calendar, Send } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import type { Lead, LeadStatus } from '@/types';
 
@@ -21,7 +21,14 @@ const statusColors: Record<LeadStatus, string> = {
   closed: 'bg-gray-100 text-gray-500',
 };
 
-type LeadWithPlan = Lead & { plan_name?: string };
+type LeadWithPlan = Lead & { plan_name?: string; notes?: string; follow_up_date?: string };
+
+interface CustomerNote {
+  id: string;
+  content: string;
+  note_type: string;
+  created_at: string;
+}
 
 export default function AdminLeadsPage() {
   const [leads, setLeads] = useState<LeadWithPlan[]>([]);
@@ -29,6 +36,9 @@ export default function AdminLeadsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedLead, setSelectedLead] = useState<LeadWithPlan | null>(null);
   const [updating, setUpdating] = useState(false);
+  const [newNote, setNewNote] = useState('');
+  const [customerNotes, setCustomerNotes] = useState<CustomerNote[]>([]);
+  const [followUpDate, setFollowUpDate] = useState('');
   const { showToast } = useToast();
   const supabase = createClient();
 
@@ -66,6 +76,89 @@ export default function AdminLeadsPage() {
   useEffect(() => {
     fetchLeads();
   }, []);
+
+  useEffect(() => {
+    if (selectedLead) {
+      fetchNotes(selectedLead.id);
+      setFollowUpDate(selectedLead.follow_up_date || '');
+    }
+  }, [selectedLead?.id]);
+
+  const fetchNotes = async (leadId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('customer_notes')
+        .select('*')
+        .eq('lead_id', leadId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setCustomerNotes(data || []);
+    } catch (error) {
+      console.error('Error fetching notes:', error);
+    }
+  };
+
+  const addNote = async () => {
+    if (!selectedLead || !newNote.trim()) return;
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('customer_notes')
+        .insert({
+          lead_id: selectedLead.id,
+          user_id: user.id,
+          content: newNote,
+          note_type: 'general',
+        });
+
+      if (error) throw error;
+
+      showToast({
+        type: 'success',
+        title: 'บันทึกสำเร็จ',
+        message: 'เพิ่มบันทึกเรียบร้อยแล้ว',
+      });
+
+      setNewNote('');
+      fetchNotes(selectedLead.id);
+    } catch (error) {
+      console.error('Error adding note:', error);
+      showToast({
+        type: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        message: 'ไม่สามารถเพิ่มบันทึกได้',
+      });
+    }
+  };
+
+  const updateFollowUp = async () => {
+    if (!selectedLead) return;
+
+    try {
+      const { error } = await supabase
+        .from('leads')
+        .update({ follow_up_date: followUpDate || null })
+        .eq('id', selectedLead.id);
+
+      if (error) throw error;
+
+      showToast({
+        type: 'success',
+        title: 'บันทึกสำเร็จ',
+        message: 'ตั้งวันติดตามเรียบร้อยแล้ว',
+      });
+
+      setLeads(leads.map(l =>
+        l.id === selectedLead.id ? { ...l, follow_up_date: followUpDate } : l
+      ));
+    } catch (error) {
+      console.error('Error updating follow up:', error);
+    }
+  };
 
   const filteredLeads = leads.filter((lead) =>
     statusFilter === 'all' || lead.status === statusFilter
@@ -305,6 +398,66 @@ export default function AdminLeadsPage() {
               <div>
                 <p className="text-sm text-gray-500">เวลาที่ส่ง</p>
                 <p>{formatDate(selectedLead.created_at)}</p>
+              </div>
+
+              {/* Follow-up Date */}
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Calendar size={16} className="text-yellow-600" />
+                  <p className="text-sm font-medium text-yellow-800">วันนัดติดตาม</p>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="date"
+                    value={followUpDate}
+                    onChange={(e) => setFollowUpDate(e.target.value)}
+                    className="flex-1 px-3 py-2 border rounded-lg text-sm"
+                  />
+                  <Button size="sm" onClick={updateFollowUp}>
+                    บันทึก
+                  </Button>
+                </div>
+              </div>
+
+              {/* Customer Notes */}
+              <div className="border-t pt-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <StickyNote size={16} className="text-gray-600" />
+                  <p className="font-medium text-gray-900">บันทึกการติดต่อ</p>
+                </div>
+
+                {/* Add Note */}
+                <div className="flex gap-2 mb-4">
+                  <input
+                    type="text"
+                    value={newNote}
+                    onChange={(e) => setNewNote(e.target.value)}
+                    placeholder="เพิ่มบันทึก..."
+                    className="flex-1 px-3 py-2 border rounded-lg text-sm"
+                    onKeyPress={(e) => e.key === 'Enter' && addNote()}
+                  />
+                  <Button size="sm" onClick={addNote} disabled={!newNote.trim()}>
+                    <Send size={14} />
+                  </Button>
+                </div>
+
+                {/* Notes List */}
+                <div className="space-y-2 max-h-48 overflow-y-auto">
+                  {customerNotes.length > 0 ? (
+                    customerNotes.map((note) => (
+                      <div key={note.id} className="bg-gray-50 p-3 rounded-lg">
+                        <p className="text-sm text-gray-800">{note.content}</p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {formatDate(note.created_at)}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-400 text-center py-4">
+                      ยังไม่มีบันทึก
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* Actions */}

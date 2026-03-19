@@ -376,10 +376,13 @@ export const metadata: Metadata = {
 | Page | Path | Description |
 |------|------|-------------|
 | Dashboard | /admin | Overview stats, recent leads |
-| Plans | /admin/plans | CRUD insurance plans |
-| Leads | /admin/leads | Manage customer leads (Supabase connected) |
+| Plans | /admin/plans | CRUD insurance plans (Supabase connected) |
+| Leads | /admin/leads | Manage customer leads + notes (Supabase connected) |
 | Analytics | /admin/analytics | Charts and metrics |
 | Users | /admin/users | Manage user roles (admin/agent/customer) |
+| Commission | /admin/commission | Commission tracking and earnings |
+| Reminders | /admin/reminders | Follow-up reminders for leads |
+| Settings | /admin/settings | System settings |
 
 ## User Roles
 
@@ -411,6 +414,79 @@ export const metadata: Metadata = {
 | Register | /register | New user registration |
 | Forgot Password | /forgot-password | Request password reset email |
 | Reset Password | /reset-password | Set new password (from email link) |
+
+## Database Migrations
+
+Located in `/supabase/migrations/`:
+
+| File | Description |
+|------|-------------|
+| 001_initial_schema.sql | Initial tables and basic RLS |
+| 002_first_user_admin.sql | Trigger for first user = admin |
+| 003_admin_manage_users.sql | RLS for admin to manage profiles |
+| 004_admin_manage_plans.sql | RLS for admin CRUD on plans/companies |
+| 005_commission_tracking.sql | Commission rate and tracking |
+| 006_customer_notes.sql | Customer notes and follow-up dates |
+
+### Running Migrations
+
+```bash
+# Push all migrations to Supabase
+npx supabase db push
+
+# Or run SQL manually in Supabase Dashboard > SQL Editor
+```
+
+## RLS Policies
+
+### Profiles Table
+- Users can view/update their own profile
+- Admins can view/update all profiles
+
+### Insurance Plans Table
+- Anyone can view active plans (`is_active = true`)
+- Admins can view ALL plans (including inactive)
+- Admins can insert/update/delete plans
+
+### Insurance Companies Table
+- Anyone can view companies
+- Admins can insert/update/delete companies
+
+## Agent Tools (v1.4)
+
+### Quote Calculator
+```typescript
+import QuoteCalculator from '@/components/QuoteCalculator';
+
+<QuoteCalculator
+  basePremium={12000}
+  planName="แผนสุขภาพ A"
+  planType="health"
+  onCalculate={(premium) => console.log(premium)}
+/>
+```
+
+### AI Recommendation
+```typescript
+import { getRecommendations } from '@/lib/recommendation';
+
+const recommendations = getRecommendations(plans, {
+  age: 35,
+  gender: 'male',
+  budget: 15000,
+  insuranceType: 'health',
+});
+```
+
+### Customer Notes
+- บันทึกผ่าน `/admin/leads` modal
+- เก็บใน `customer_notes` table
+- แสดงประวัติการติดต่อแบบ timeline
+
+### Follow-up Reminder
+- ตั้งวันนัดติดตามใน lead modal
+- ดูรายการที่ `/admin/reminders`
+- แบ่งตาม: เลยกำหนด / วันนี้ / กำลังจะถึง
 
 ## Contact & Support
 

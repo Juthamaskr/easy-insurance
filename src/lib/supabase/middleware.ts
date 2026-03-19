@@ -48,11 +48,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Admin only routes
-  if (request.nextUrl.pathname.startsWith('/admin')) {
-    // For now, we'll check admin status on the page level
-    // You can add additional checks here if needed
-  }
+  // Admin check is done at page level to avoid RLS issues in middleware
 
   return supabaseResponse;
 }

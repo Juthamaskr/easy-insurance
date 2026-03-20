@@ -37,6 +37,12 @@
 - ⏰ **Follow-up Reminder** - แจ้งเตือนติดตามลูกค้า
 - 🤖 **AI Recommendation** - แนะนำแผนประกันที่เหมาะสม
 
+### New in v1.5 - UX Improvements
+- 📊 **Analytics Charts** - กราฟแสดงสถิติด้วย Recharts
+- 🌙 **Dark Mode** - โหมดมืดสำหรับใช้งานสบายตา
+- 🔍 **Search Plans** - ค้นหาแผนประกันแบบ real-time
+- 💬 **AI Chatbot** - ผู้ช่วย AI ตอบคำถามและแนะนำประกัน
+
 ## 🚀 Getting Started
 
 ### Prerequisites

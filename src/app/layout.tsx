@@ -5,6 +5,8 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ToastProvider } from '@/components/ui';
 import { PWARegister } from '@/components/PWARegister';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import ChatBot from '@/components/ChatBot';
 
 const notoSansThai = Noto_Sans_Thai({
   subsets: ['thai', 'latin'],
@@ -65,16 +67,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="th">
+    <html lang="th" suppressHydrationWarning>
       <body className={`${notoSansThai.className} min-h-screen flex flex-col`}>
         <PWARegister />
-        <ToastProvider>
-          <Header />
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer />
-        </ToastProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            <Header />
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+            <ChatBot />
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

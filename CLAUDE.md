@@ -488,6 +488,62 @@ const recommendations = getRecommendations(plans, {
 - ดูรายการที่ `/admin/reminders`
 - แบ่งตาม: เลยกำหนด / วันนี้ / กำลังจะถึง
 
+## UX Improvements (v1.5)
+
+### Analytics Charts
+```typescript
+import {
+  LeadStatusChart,
+  PlanTypeChart,
+  MonthlyTrendChart,
+  CommissionChart,
+  ConversionFunnel,
+} from '@/components/AnalyticsCharts';
+
+// Pie chart for lead status
+<LeadStatusChart data={[{ name: 'ใหม่', value: 10, color: '#3B82F6' }]} />
+
+// Bar chart for plan types
+<PlanTypeChart data={[{ name: 'ประกันสุขภาพ', count: 5 }]} />
+
+// Line chart for trends
+<MonthlyTrendChart data={[{ month: 'ม.ค.', leads: 10, comparisons: 50 }]} />
+```
+
+### Dark Mode
+```typescript
+import { useTheme } from '@/components/ThemeProvider';
+
+const { theme, setTheme, resolvedTheme } = useTheme();
+
+// Toggle dark mode
+setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+```
+
+CSS Variables for dark mode are defined in `globals.css`:
+- Light: `--background: #f9fafb`, `--foreground: #1a365d`
+- Dark: `--background: #111827`, `--foreground: #f9fafb`
+
+### Search Plans
+Search functionality in results page:
+- Search by: ชื่อแผน, บริษัท, ความคุ้มครอง
+- Real-time filtering
+- Clear button to reset
+
+### AI Chatbot
+```typescript
+import ChatBot from '@/components/ChatBot';
+
+// Added to layout.tsx - appears on all pages
+<ChatBot />
+```
+
+Features:
+- ตอบคำถามเรื่องประกัน
+- แนะนำแผนประกันจากข้อมูลในระบบ
+- รองรับภาษาไทย
+- UI แบบ floating chat window
+
 ## Contact & Support
 
 For questions about this project:

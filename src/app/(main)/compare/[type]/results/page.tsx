@@ -3,7 +3,7 @@
 import { useParams, useSearchParams } from 'next/navigation';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, SlidersHorizontal, Loader2, Heart } from 'lucide-react';
+import { ArrowLeft, SlidersHorizontal, Loader2, Heart, Search, X } from 'lucide-react';
 import { Card, Button, Select, Modal, Input, useToast, SkeletonCard } from '@/components/ui';
 import { PlanCard, CompareTable } from '@/components/compare';
 import { getInsuranceTypeLabel, formatPrice } from '@/lib/utils';
@@ -27,6 +27,7 @@ export default function ResultsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [savedPlanIds, setSavedPlanIds] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<{ id: string } | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const supabase = createClient();
 
@@ -92,9 +93,22 @@ export default function ResultsPage() {
     fetchPlans();
   }, [type, age, budget_max]);
 
-  // Sort plans
+  // Filter and sort plans
   const sortedPlans = useMemo(() => {
-    const sorted = [...plans];
+    // First filter by search query
+    let filtered = plans;
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = plans.filter((plan) => {
+        const nameMatch = plan.name?.toLowerCase().includes(query);
+        const companyMatch = plan.company?.name?.toLowerCase().includes(query);
+        const benefitsMatch = plan.benefits?.some((b: string) => b.toLowerCase().includes(query));
+        return nameMatch || companyMatch || benefitsMatch;
+      });
+    }
+
+    // Then sort
+    const sorted = [...filtered];
     switch (sortBy) {
       case 'price_asc':
         sorted.sort((a, b) => a.premium_yearly - b.premium_yearly);
@@ -110,7 +124,7 @@ export default function ResultsPage() {
         break;
     }
     return sorted;
-  }, [plans, sortBy]);
+  }, [plans, sortBy, searchQuery]);
 
   const selectedPlans = plans.filter((p) => selectedPlanIds.includes(p.id));
 
@@ -320,6 +334,33 @@ export default function ResultsPage() {
               />
             </div>
           </div>
+
+          {/* Search Bar */}
+          <div className="relative mt-4">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search size={20} className="text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="ค้นหาแผนประกัน, บริษัท, หรือความคุ้มครอง..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+              >
+                <X size={20} />
+              </button>
+            )}
+          </div>
+          {searchQuery && (
+            <p className="mt-2 text-sm text-gray-500">
+              พบ {sortedPlans.length} แผนที่ตรงกับ "{searchQuery}"
+            </p>
+          )}
         </div>
 
         {/* Selection Bar */}

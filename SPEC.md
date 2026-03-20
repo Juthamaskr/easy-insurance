@@ -600,6 +600,13 @@ NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 - ✅ **Follow-up Reminder** - ระบบแจ้งเตือนติดตามลูกค้า
 - ✅ **AI Recommendation** - แนะนำแผนประกันที่เหมาะสมกับลูกค้าโดยใช้ scoring algorithm
 
+### New in v1.5 - UX Improvements
+- ✅ **Analytics Charts** - กราฟแสดงข้อมูลสถิติด้วย Recharts (Pie, Bar, Line charts)
+- ✅ **Dark Mode** - โหมดมืดสำหรับใช้งานในที่แสงน้อย พร้อม toggle button
+- ✅ **Search Plans** - ค้นหาแผนประกันจากชื่อ, บริษัท, หรือความคุ้มครอง
+- ✅ **AI Chatbot** - ผู้ช่วย AI ตอบคำถามและแนะนำประกัน แบบ real-time
+- ✅ **PWA Enhanced** - ปรับปรุง PWA สำหรับใช้งานบน Mobile ได้ดีขึ้น
+
 ---
 
 ## 📝 Revision History
@@ -611,3 +618,4 @@ NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 | 1.2.0 | 2026-03-19 | Added: PWA Icons, Forgot/Reset Password, Dashboard History, Leads Supabase integration |
 | 1.3.0 | 2026-03-19 | Added: User Management, First User = Admin, Role-based access control |
 | 1.4.0 | 2026-03-19 | Added: Commission Tracker, Quote Calculator, Customer Notes, Follow-up Reminder, AI Recommendation |
+| 1.5.0 | 2026-03-20 | Added: Analytics Charts, Dark Mode, Search Plans, AI Chatbot, Enhanced PWA |

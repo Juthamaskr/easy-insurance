@@ -3,10 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Menu, X, User, LogOut, Settings } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings, Sun, Moon } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui';
 import { cn } from '@/lib/utils';
+import { useTheme } from '@/components/ThemeProvider';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 export function Header() {
@@ -14,6 +15,11 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const supabase = createClient();
+  const { theme, setTheme, resolvedTheme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -50,13 +56,13 @@ export function Header() {
   };
 
   return (
-    <header className="bg-white border-b border-gray-100 sticky top-0 z-30">
+    <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 sticky top-0 z-30 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 touch-manipulation">
             <span className="text-2xl">🛡️</span>
-            <span className="font-bold text-lg sm:text-xl text-gray-900">Easy Insurance</span>
+            <span className="font-bold text-lg sm:text-xl text-gray-900 dark:text-white">Easy Insurance</span>
           </Link>
 
           {/* Desktop/iPad Navigation */}
@@ -79,6 +85,15 @@ export function Header() {
 
           {/* Desktop/iPad Auth Buttons */}
           <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Toggle theme"
+            >
+              {resolvedTheme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+
             {user ? (
               <div className="flex items-center space-x-2 lg:space-x-4">
                 <Link href="/admin">
@@ -112,19 +127,28 @@ export function Header() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-3 -mr-2 text-gray-600 touch-manipulation"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile Theme Toggle & Menu Button */}
+          <div className="md:hidden flex items-center space-x-1">
+            <button
+              onClick={toggleTheme}
+              className="p-3 text-gray-600 dark:text-gray-300 touch-manipulation"
+              aria-label="Toggle theme"
+            >
+              {resolvedTheme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
+            </button>
+            <button
+              className="p-3 -mr-2 text-gray-600 dark:text-gray-300 touch-manipulation"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-3 border-t border-gray-100 animate-slide-up">
+          <div className="md:hidden py-3 border-t border-gray-100 dark:border-gray-800 animate-slide-up">
             <nav className="flex flex-col">
               {navLinks.map((link) => (
                 <Link

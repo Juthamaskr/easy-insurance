@@ -56,13 +56,21 @@ export function Header() {
   };
 
   return (
-    <header className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 sticky top-0 z-30 transition-colors">
+    <header className={cn(
+      "sticky top-0 z-30 transition-colors border-b",
+      resolvedTheme === 'dark'
+        ? "bg-gray-900 border-gray-800"
+        : "bg-white border-gray-100"
+    )}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 touch-manipulation">
             <span className="text-2xl">🛡️</span>
-            <span className="font-bold text-lg sm:text-xl text-gray-900 dark:text-white">Easy Insurance</span>
+            <span className={cn(
+              "font-bold text-lg sm:text-xl",
+              resolvedTheme === 'dark' ? "text-white" : "text-gray-900"
+            )}>Easy Insurance</span>
           </Link>
 
           {/* Desktop/iPad Navigation */}
@@ -75,7 +83,7 @@ export function Header() {
                   'text-sm font-medium transition-colors py-2',
                   isActive(link.href)
                     ? 'text-cyan-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : resolvedTheme === 'dark' ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                 )}
               >
                 {link.label}
@@ -88,7 +96,10 @@ export function Header() {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+              className={cn(
+                "p-2 rounded-lg transition-colors",
+                resolvedTheme === 'dark' ? "text-gray-300 hover:bg-gray-800" : "text-gray-600 hover:bg-gray-100"
+              )}
               aria-label="Toggle theme"
             >
               {resolvedTheme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
@@ -131,13 +142,19 @@ export function Header() {
           <div className="md:hidden flex items-center space-x-1">
             <button
               onClick={toggleTheme}
-              className="p-3 text-gray-600 dark:text-gray-300 touch-manipulation"
+              className={cn(
+                "p-3 touch-manipulation",
+                resolvedTheme === 'dark' ? "text-gray-300" : "text-gray-600"
+              )}
               aria-label="Toggle theme"
             >
               {resolvedTheme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
             </button>
             <button
-              className="p-3 -mr-2 text-gray-600 dark:text-gray-300 touch-manipulation"
+              className={cn(
+                "p-3 -mr-2 touch-manipulation",
+                resolvedTheme === 'dark' ? "text-gray-300" : "text-gray-600"
+              )}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -148,7 +165,10 @@ export function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-3 border-t border-gray-100 dark:border-gray-800 animate-slide-up">
+          <div className={cn(
+            "md:hidden py-3 border-t animate-slide-up",
+            resolvedTheme === 'dark' ? "border-gray-800" : "border-gray-100"
+          )}>
             <nav className="flex flex-col">
               {navLinks.map((link) => (
                 <Link
@@ -158,14 +178,17 @@ export function Header() {
                     'text-base font-medium px-2 py-3 rounded-lg touch-manipulation',
                     isActive(link.href)
                       ? 'text-cyan-600 bg-cyan-50'
-                      : 'text-gray-600 active:bg-gray-50'
+                      : resolvedTheme === 'dark' ? 'text-gray-300' : 'text-gray-600 active:bg-gray-50'
                   )}
                 >
                   {link.label}
                 </Link>
               ))}
 
-              <div className="mt-3 pt-3 border-t border-gray-100 flex flex-col space-y-2">
+              <div className={cn(
+                "mt-3 pt-3 border-t flex flex-col space-y-2",
+                resolvedTheme === 'dark' ? "border-gray-800" : "border-gray-100"
+              )}>
                 {user ? (
                   <>
                     <Link href="/admin">

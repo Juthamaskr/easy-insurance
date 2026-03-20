@@ -11,6 +11,10 @@
   --card-border: #e5e7eb;
   --muted: #6b7280;
   --muted-bg: #f3f4f6;
+  --header-bg: #ffffff;
+  --header-border: #f3f4f6;
+  --header-text: #111827;
+  --header-text-muted: #4b5563;
 }
 
 .dark {
@@ -24,6 +28,10 @@
   --card-border: #374151;
   --muted: #9ca3af;
   --muted-bg: #374151;
+  --header-bg: #111827;
+  --header-border: #1f2937;
+  --header-text: #f9fafb;
+  --header-text-muted: #d1d5db;
 }
 
 @theme inline {
@@ -49,9 +57,7 @@ body {
   color-scheme: dark;
 }
 
-.dark .bg-white {
-  background-color: var(--card-bg);
-}
+/* bg-white ใน dark mode จะใช้ Tailwind dark:bg-* แทน */
 
 .dark .bg-gray-50 {
   background-color: var(--background);

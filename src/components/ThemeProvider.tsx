@@ -17,6 +17,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
+    // Check if dark class was already applied by inline script
+    const isDark = document.documentElement.classList.contains('dark');
+    setResolvedTheme(isDark ? 'dark' : 'light');
+
     // Load saved theme from localStorage
     const savedTheme = localStorage.getItem('theme') as Theme | null;
     if (savedTheme) {
